@@ -3,10 +3,11 @@ pipeline {
 	stages{
 		stage('Python pytest Tests') {
 			steps{
-				sh 'virtualenv -p /usr/bin/python venv'
-				sh 'source venv/bin/activate && pip install -r requirements.txt'
-				sh 'source venv/bin/activate && pytest --junit-xml=test_results.xml test || true'
-				junit keepLongStdio: true, allowEmptyResults: true, testResults: 'test_results.xml'
+				withPythonEnv('/usr/bin/python/venv/bin'):
+					sh 'source venv/bin/activate && pip install -r requirements.txt'
+					sh 'source venv/bin/activate && pytest --junit-xml=test_results.xml test || true'
+					junit keepLongStdio: true, allowEmptyResults: true, testResults: 'test_results.xml'
+				}
 			}
 		}
 	}
